@@ -1,0 +1,63 @@
+{
+
+	"schemaVersion" : 1,
+
+
+	"id"      : "${mod_id}",
+	"version" : "${mod_version}",
+	"license" : "LGPL-2.1-only",
+
+	"name"        : "${mod_name}",
+	"description" : "TODO",
+	"icon"        : "assets/${mod_id}/icon.png",
+
+	"custom" : {
+		"modmenu" : {
+			"links" : {
+				"modmenu.discord" : "https://discord.gg/b6gWFwDyC9"
+			},
+			"badges": ["library"]
+		}
+	},
+
+	"authors" : [
+		{"name" : "Totobird Creations", "contact" : {
+			"homepage" : "https://github.com/Totobird-Creations"
+		}}
+	],
+	"contact" : {
+		"homepage" : "https://discord.gg/b6gWFwDyC9",
+		"sources"  : "https://github.com/Totobird-Creations/${mod_name}",
+		"issues"   : "https://github.com/Totobird-Creations/${mod_name}/issues",
+		"wiki"     : "https://github.com/Totobird-Creations/${mod_name}/wiki"
+	},
+
+
+	"environment" : "client",
+	"entrypoints" : {
+		"client" : [{"value" : "${mod_group}.${mod_id}.Main", "adapter" : "kotlin"}]
+	},
+	"mixins": [{"config" : "${mod_id}.mixins.json", "environment" : "client"}],
+	"accessWidener": "${mod_id}.accesswidener",
+
+
+	"depends" : {
+
+		"java"                   : ">=17",
+		"minecraft"              : "~${minecraft_version}",
+		"fabricloader"           : ">=${fabricloader_version}",
+		"fabric-api"             : "*",
+		"fabric-language-kotlin" : ">=${kotlin_version}"
+
+	},
+
+	"recommends": {
+		"nochatreports" : "*",
+		"modmenu"       : "*"
+	},
+
+	"breaks": {
+		"recode" : "*"
+	}
+
+}

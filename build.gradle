@@ -1,0 +1,95 @@
+plugins {
+	id 'fabric-loom' version '1.4-SNAPSHOT'
+	id 'maven-publish'
+	id "org.jetbrains.kotlin.jvm" version "${kotlin_version}"
+}
+
+version = mod_version
+group = "${mod_group}.${mod_id}"
+
+base {
+	archivesName = mod_id
+}
+
+repositories {
+	// Adventure
+	mavenCentral()
+}
+
+dependencies {
+	// Minecraft
+	minecraft "com.mojang:minecraft:${project.minecraft_version}"
+	// Fabric
+	modImplementation "net.fabricmc:fabric-loader:${project.fabricloader_version}"
+	mappings "net.fabricmc:yarn:${project.minecraft_version}+${project.yarn_version}"
+	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabricapi_version}+${project.minecraft_version}"
+	modImplementation "net.fabricmc:fabric-language-kotlin:${project.fabrickotlin_version}+kotlin.${project.kotlin_version}"
+	// Adventure
+	include(implementation("net.kyori:adventure-text-minimessage:${project.adventure_version}"))
+	include(implementation("net.kyori:adventure-text-serializer-gson:${project.adventure_version}"))
+	// Mixinextras
+	include(implementation(annotationProcessor("io.github.llamalad7:mixinextras-fabric:${project.mixinextras_version}")))
+
+}
+
+processResources {
+	filesMatching(["*.properties", "*.json", "assets/**/*.json"]) {
+		expand \
+				"mod_id"                      : mod_id,
+				"mod_name"                    : mod_name,
+				"mod_version"                 : mod_version,
+				"mod_group"                   : mod_group,
+
+				"minecraft_version"           : minecraft_version,
+				"fabricloader_version"        : fabricloader_version,
+				"kotlin_version"              : kotlin_version
+
+	}
+}
+
+loom {
+	accessWidenerPath = file("src/main/resources/${mod_id}.accesswidener")
+}
+
+tasks.withType(JavaCompile).configureEach {
+	it.options.release = 17
+}
+
+tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {
+	kotlinOptions {
+		jvmTarget = 17
+	}
+}
+
+java {
+	// Loom will automatically attach sourcesJar to a RemapSourcesJar task and to the "build" task
+	// if it is present.
+	// If you remove this line, sources will not be generated.
+	withSourcesJar()
+
+	sourceCompatibility = JavaVersion.VERSION_17
+	targetCompatibility = JavaVersion.VERSION_17
+}
+
+jar {
+	from("LICENSE") {
+		rename { "${it}_${project.base.archivesName.get()}"}
+	}
+}
+
+// configure the maven publication
+publishing {
+	publications {
+		mavenJava(MavenPublication) {
+			from components.java
+		}
+	}
+
+	// See https://docs.gradle.org/current/userguide/publishing_maven.html for information on how to set up publishing.
+	repositories {
+		// Add repositories to publish to here.
+		// Notice: This block does NOT have the same function as the block in the top level.
+		// The repositories here will be used for publishing your artifact, not for
+		// retrieving dependencies.
+	}
+}

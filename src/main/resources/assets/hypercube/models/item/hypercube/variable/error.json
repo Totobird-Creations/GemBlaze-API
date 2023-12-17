@@ -1,0 +1,6 @@
+{
+    "parent" : "hypercube:item/hypercube/variable/base",
+    "textures" : {
+        "layer1" : "hypercube:item/error"
+    }
+}

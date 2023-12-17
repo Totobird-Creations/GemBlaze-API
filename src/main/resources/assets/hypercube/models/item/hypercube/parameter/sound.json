@@ -1,0 +1,6 @@
+{
+    "parent" : "hypercube:item/hypercube/parameter/base",
+    "textures" : {
+        "layer1" : "minecraft:item/nautilus_shell"
+    }
+}
