@@ -8,7 +8,7 @@
 	"license" : "LGPL-2.1-only",
 
 	"name"        : "${mod_name}",
-	"description" : "TODO",
+	"description" : "DiamondFire Utility Creation Just Got a Lot Easier",
 	"icon"        : "assets/${mod_id}/icon.png",
 
 	"custom" : {
@@ -35,7 +35,8 @@
 
 	"environment" : "client",
 	"entrypoints" : {
-		"client" : [{"value" : "${mod_group}.${mod_id}.Main", "adapter" : "kotlin"}]
+		"client"  : [{"value" : "${mod_group}.${mod_id}.Main"                    , "adapter" : "kotlin"}],
+		"modmenu" : [{"value" : "${mod_group}.${mod_id}.mod.config.ConfigScreen" , "adapter" : "kotlin"}]
 	},
 	"mixins": [{"config" : "${mod_id}.mixins.json", "environment" : "client"}],
 	"accessWidener": "${mod_id}.accesswidener",
@@ -43,21 +44,25 @@
 
 	"depends" : {
 
-		"java"                   : ">=17",
-		"minecraft"              : "~${minecraft_version}",
-		"fabricloader"           : ">=${fabricloader_version}",
-		"fabric-api"             : "*",
-		"fabric-language-kotlin" : ">=${kotlin_version}"
+		"java"                      : ">=17",
+		"minecraft"                 : "~${minecraft_version}",
+		"fabricloader"              : ">=${fabricloader_version}",
+		"fabric-api"                : "*",
+		"fabric-language-kotlin"    : ">=${kotlin_version}",
+		"yet_another_config_lib_v3" : "*"
 
 	},
 
 	"recommends": {
-		"nochatreports" : "*",
-		"modmenu"       : "*"
+		"nochatreports"   : "*",
+		"modmenu"         : "*",
+		"codeclient"      : "*",
+		"visiblebarriers" : "*"
 	},
 
 	"breaks": {
-		"recode" : "*"
+		"recode"     : "*",
+		"codeclient" : "<${codeclient_version}"
 	}
 
 }

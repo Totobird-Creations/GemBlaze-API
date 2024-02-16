@@ -11,7 +11,7 @@ import net.totobirdcreations.gemblazeapi.api.State
 import net.totobirdcreations.gemblazeapi.util.*
 
 
-object Utilities {
+object Inventory {
 
     /**
      * Triggered when the player's dev item list is being created (Instruction blocks, reference book, bracket finder, etc).
@@ -63,21 +63,39 @@ object Utilities {
      */
     @JvmStatic val glitchStick : RequestableValue<ItemStack> = RequestableValue{-> run {
         if (State.getPlot()?.mode == DiamondFireMode.DEV) {
-            val selectedSlot = Main.CLIENT.player?.inventory?.selectedSlot;
-            if (selectedSlot != null) {
-                if (Messages.sendCommand("plot glitch")) {
-                    val packet = Packets.waitForPacket(ScreenHandlerSlotUpdateS2CPacket::class.java, 100);
-                    if (packet != null) {
-                        InventoryBuilder.putInventoryItem(packet.slot, Items.AIR.defaultStack);
-                        return@run packet.stack;
-                    }
+            if (Main.CLIENT.networkHandler?.sendCommand("plot glitch") == true) {
+                val packet = Packets.waitForPacket(ScreenHandlerSlotUpdateS2CPacket::class.java, 100);
+                if (packet != null && packet.stack.isOf(Items.STICK)) {
+                    Thread.sleep(100);
+                    InventoryBuilder.putInventoryItem(packet.slot, Items.AIR.defaultStack);
+                    return@run packet.stack.copyWithCount(1);
                 }
             }
             throw RequestFailedToBeFulfilledException();
         } else {
             throw RequestImpossibleToFulfillException();
         }
-    }}
+    }};
+    /**
+     * The cancel scythe item.
+     *
+     * *May be unknown.*
+     */
+    @JvmStatic val cancelWand  : RequestableValue<ItemStack> = RequestableValue{-> run {
+        if (State.getPlot()?.mode == DiamondFireMode.DEV) {
+            if (Main.CLIENT.networkHandler?.sendCommand("cancel") == true) {
+                val packet = Packets.waitForPacket(ScreenHandlerSlotUpdateS2CPacket::class.java, 100);
+                if (packet != null && packet.stack.isOf(Items.DIAMOND_SHOVEL)) {
+                    Thread.sleep(100);
+                    InventoryBuilder.putInventoryItem(packet.slot, Items.AIR.defaultStack);
+                    return@run packet.stack.copyWithCount(1);
+                }
+            }
+            throw RequestFailedToBeFulfilledException();
+        } else {
+            throw RequestImpossibleToFulfillException();
+        }
+    }};
 
     /**
      * The value menu item.
@@ -122,6 +140,7 @@ object Utilities {
         this.bracketFinder = null;
         this.notArrow      = null;
         this.glitchStick.putNull();
+        this.cancelWand.putNull();
         this.valuesMenu            = null;
         this.instructionBlocksMenu = null;
     }
@@ -133,7 +152,7 @@ object Utilities {
         else if (stack.isOf(Items.BLAZE_ROD)) {
             this.bracketFinder = stack.copy();
         }
-        else if (stack.isOf(Items.ARROW)) {
+        else if (stack.isOf(Items.SPECTRAL_ARROW)) {
             this.notArrow = stack.copy();
         }
         else if (stack.isOf(Items.IRON_INGOT)) {

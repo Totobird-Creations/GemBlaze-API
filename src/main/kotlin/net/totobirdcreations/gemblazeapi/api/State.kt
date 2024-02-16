@@ -78,6 +78,27 @@ object State {/**
     @JvmStatic fun isOnDF() : Boolean {
         return state != null;
     }
+    /**
+     * Returns `true` if the player is currently in play mode.
+     **/
+    @JvmStatic fun isInPlay() : Boolean {
+        if (state == null) {throw IllegalStateException();}
+        return state!!.plot?.mode == DiamondFireMode.PLAY;
+    }
+    /**
+     * Returns `true` if the player is currently in build mode.
+     **/
+    @JvmStatic fun isInBuild() : Boolean {
+        if (state == null) {throw IllegalStateException();}
+        return state!!.plot?.mode == DiamondFireMode.BUILD;
+    }
+    /**
+     * Returns `true` if the player is currently in dev mode.
+    **/
+    @JvmStatic fun isInDev() : Boolean {
+        if (state == null) {throw IllegalStateException();}
+        return state!!.plot?.mode == DiamondFireMode.DEV;
+    }
 
     /**
      * Returns the node the player is currently on, or `null` if it is unknown.

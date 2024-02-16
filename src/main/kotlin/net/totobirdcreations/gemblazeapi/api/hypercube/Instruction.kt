@@ -53,7 +53,7 @@ class InstructionInfo(
                 stack.name,
                 stack.getSubNbt(ItemStack.DISPLAY_KEY)
                     ?.getList(ItemStack.LORE_KEY, NbtElement.STRING_TYPE.toInt())
-                    ?.mapNotNull{element -> Text.Serializer.fromJson((element as NbtString).asString())}
+                    ?.mapNotNull{element -> Text.Serialization.fromJson((element as NbtString).asString())}
                     ?: listOf(),
                 stack
             );

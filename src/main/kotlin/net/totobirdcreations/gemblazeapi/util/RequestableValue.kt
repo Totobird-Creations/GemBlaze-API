@@ -6,8 +6,8 @@ class RequestableValue<T : Any> internal constructor(
     private val requester : () -> T
 ) {
 
-    var isKnown : Boolean = false
-        private set;
+    private val isKnown : Boolean
+        get() {return this.value != null;};
 
 
     fun getOrNull() : T? {
@@ -24,18 +24,15 @@ class RequestableValue<T : Any> internal constructor(
 
 
     internal fun put(value : T) {
-        this.isKnown = true;
-        this.value   = value;
+        this.value = value;
     }
 
     internal fun putOrNull(value : T?) {
-        this.isKnown = value != null;
-        this.value   = value;
+        this.value = value;
     }
 
     internal fun putNull() {
-        this.isKnown = false;
-        this.value   = null;
+        this.value = null;
     }
 
 

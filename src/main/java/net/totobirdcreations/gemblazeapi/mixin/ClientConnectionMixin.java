@@ -6,7 +6,6 @@ import net.minecraft.network.ClientConnection;
 import net.minecraft.network.PacketCallbacks;
 import net.minecraft.network.listener.PacketListener;
 import net.minecraft.network.packet.Packet;
-import net.totobirdcreations.gemblazeapi.api.hypercube.Utilities;
 import net.totobirdcreations.gemblazeapi.detect.InboundPackets;
 import net.totobirdcreations.gemblazeapi.detect.OutboundPackets;
 import org.jetbrains.annotations.Nullable;

@@ -42,9 +42,9 @@ sealed class DiamondFireNode private constructor(
         val index : UInt
     ) : DiamondFireNode("node${index}", "Node ${index}");
 
-    class Event : DiamondFireNode("event", "Event");
+    object Event : DiamondFireNode("event", "Event");
 
-    class Beta : DiamondFireNode("beta", "Beta");
+    object Beta : DiamondFireNode("beta", "Beta");
 
     class Other(
         name : String
@@ -64,6 +64,22 @@ sealed class DiamondFireNode private constructor(
         return result;
     }
 
+    companion object {
+        fun from(original : String) : DiamondFireNode {
+            val string = original.lowercase().removePrefix("node ");
+            if (string == "event") {
+                return Event;
+            } else if (string == "beta") {
+                return Beta;
+            }
+            val int = string.toUIntOrNull();
+            if (int != null) {
+                return Indexed(int);
+            }
+            return Other(string);
+        }
+    }
+
 }
 
 
@@ -78,7 +94,7 @@ class DiamondFirePlot internal constructor(mode : DiamondFireMode) {
      *
      * *May be unknown.*
      */
-    val id          : RequestableValue<UInt>    = RequestableValue{-> TODO()};
+    val id          : RequestableValue<Int>     = RequestableValue{-> TODO()};
     /**
      * The name of the current plot.
      *
@@ -103,8 +119,14 @@ class DiamondFirePlot internal constructor(mode : DiamondFireMode) {
      */
     val area        : DiamondFirePlotArea       = DiamondFirePlotArea();
 
+    /**
+     * Information about the permissions that the
+     * player has on the current plot.
+     */
+    val permissions : DiamondFirePlotPerms      = DiamondFirePlotPerms();
+
     override fun toString() : String {
-        return "MODE( ${this.mode} ) ID( ${this.id} ) NAME( `${this.name.getOrNull()?.string?.replace("\\", "\\\\")?.replace("`", "\\`")}` ) OWNER( ${this.owner} ) WHITELISTED( ${this.whitelisted} ) AREA( ${this.area} )"
+        return "MODE( ${this.mode} ) ID( ${this.id} ) NAME( `${this.name.getOrNull()?.string?.replace("\\", "\\\\")?.replace("`", "\\`")}` ) OWNER( ${this.owner} ) WHITELISTED( ${this.whitelisted} ) AREA( ${this.area} ) PERMS( ${this.permissions} )"
     }
 
 };
@@ -116,19 +138,44 @@ class DiamondFirePlotArea internal constructor() {
      *
      * *May be unknown.*
      */
-    val buildCorner : BlockPos?                = null;
+    var buildCorner : BlockPos?                = null
+        internal set;
     /**
      * The North-West corner of the dev/code area of the current plot.
      *
      * *May be unknown.*
      */
-    val devCorner   : BlockPos?                = null;
+    var devCorner   : BlockPos?                = null
+        internal set;
     /**
      * The size of the current plot.
      *
      * *May be unknown.*
      */
-    val size        : DiamondFirePlotAreaSize? = null;
+    var size        : DiamondFirePlotAreaSize? = null
+            internal set;
+
+    fun isInBuildArea(pos : BlockPos) : Boolean? {
+        val buildCorner = this.buildCorner ?: return null;
+        val size        = this.size        ?: return null;
+        return (
+                pos.z >= buildCorner.z
+             && pos.z < buildCorner.z + size.size
+             && pos.x >= buildCorner.x
+             && pos.x < buildCorner.x + size.size
+        );
+    }
+
+    fun isInDevArea(pos : BlockPos) : Boolean? {
+        val devCorner = this.devCorner ?: return null;
+        val size      = this.size      ?: return null;
+        return (
+                pos.z >= devCorner.z
+             && pos.z < devCorner.z + size.size
+             && pos.x >= devCorner.x - 1
+             && pos.x < devCorner.x + 19
+        );
+    }
 
     override fun toString() : String {
         return "BUILDC( ${this.buildCorner} ) DEVC( ${this.devCorner} ) SIZE( ${this.size} )";
@@ -138,16 +185,57 @@ class DiamondFirePlotArea internal constructor() {
 
 
 enum class DiamondFirePlotAreaSize(
-    val size : UInt
+    val size : Int
 ) {
-    SMALL   (51u),
-    LARGE   (101u),
-    MASSIVE (301u)
+    SMALL   (51),
+    LARGE   (101),
+    MASSIVE (301)
 }
 
 
 enum class DiamondFireMode {
     PLAY,
     BUILD,
-    DEV
+    DEV;
+
+    companion object {
+        fun from(string : String) : DiamondFireMode? {
+            return when (string) {
+                "playing"  -> PLAY;
+                "building" -> BUILD;
+                "coding"   -> DEV;
+                else       -> null;
+            }
+        }
+    }
+}
+
+
+class DiamondFirePlotPerms internal constructor() {
+    /**
+     * Whether the player is whitelisted on the
+     * current plot.
+     *
+     * *May be unknown.*
+     * *If known, is always true.*
+     */
+    var hasPlay  : Boolean ? = null;
+    /**
+     * Whether the player has access to build mode
+     * on the current plot.
+     *
+     * *May be unknown.*
+     */
+    var hasBuild : Boolean ? = null;
+    /**
+     * Whether the player has access to dev mode
+     * on the current plot.
+     *
+     * *May be unknown.*
+     */
+    var hasDev   : Boolean ? = null;
+
+    override fun toString() : String {
+        return "PLAY( ${this.hasPlay} ) BUILD( ${this.hasBuild} ) DEV( ${this.hasDev} )";
+    }
 }

@@ -1,5 +1,5 @@
 plugins {
-	id 'fabric-loom' version '1.4-SNAPSHOT'
+	id 'fabric-loom' version '1.5-SNAPSHOT'
 	id 'maven-publish'
 	id "org.jetbrains.kotlin.jvm" version "${kotlin_version}"
 }
@@ -14,6 +14,12 @@ base {
 repositories {
 	// Adventure
 	mavenCentral()
+	// Yetanotherconfiglib
+	maven {url "https://maven.isxander.dev/releases"}
+	// Modmenu
+	maven {url "https://maven.terraformersmc.com/releases"}
+	// Codeclient
+	maven {url "https://api.modrinth.com/maven"}
 }
 
 dependencies {
@@ -29,6 +35,12 @@ dependencies {
 	include(implementation("net.kyori:adventure-text-serializer-gson:${project.adventure_version}"))
 	// Mixinextras
 	include(implementation(annotationProcessor("io.github.llamalad7:mixinextras-fabric:${project.mixinextras_version}")))
+	// Yetanotherconfiglib
+	modApi("dev.isxander.yacl:yet-another-config-lib-fabric:${project.yetanotherconfiglib_version}+${project.minecraft_version}")
+	// Modmenu
+	modApi("com.terraformersmc:modmenu:${project.modmenu_version}")
+	// Codecleint
+	modApi("maven.modrinth:codeclient:${codeclient_version}")
 
 }
 
@@ -42,7 +54,9 @@ processResources {
 
 				"minecraft_version"           : minecraft_version,
 				"fabricloader_version"        : fabricloader_version,
-				"kotlin_version"              : kotlin_version
+				"kotlin_version"              : kotlin_version,
+				"yetanotherconfiglib_version" : yetanotherconfiglib_version,
+				"codeclient_version"          : codeclient_version
 
 	}
 }

@@ -7,20 +7,20 @@ import net.totobirdcreations.gemblazeapi.Main
 
 
 object Packets {
-    private val pending : HashMap<Class<out Packet<out PacketListener>>, ArrayList<(Packet<out PacketListener>) -> Unit>> = hashMapOf();
+    private val pending : HashMap<Class<out Packet<out PacketListener>>, ArrayList<(Packet<out PacketListener>) -> Boolean>> = hashMapOf();
 
-    private fun <T : Packet<out PacketListener>> waitForPacket(clazz : Class<T>, callback : (T) -> Unit) {
+    private fun <T : Packet<out PacketListener>> waitForPacket(clazz : Class<T>, callback : (T) -> Boolean) {
         if (! this.pending.containsKey(clazz)) {
             this.pending[clazz] = arrayListOf();
         }
-        this.pending[clazz]!!.add(callback as ((Packet<out PacketListener>) -> Unit));
+        this.pending[clazz]!!.add(callback as ((Packet<out PacketListener>) -> Boolean));
     }
 
     /**
      * Waits until an incoming packet of type `clazz` is detected, then calls `callback`.
      * If the packet is not received before timeout, `callback` is not called.
      */
-    @JvmStatic fun <T : Packet<out PacketListener>> waitForPacket(clazz : Class<T>, timeoutMs : Long, callback : (T) -> Unit) {
+    @JvmStatic fun <T : Packet<out PacketListener>> waitForPacket(clazz : Class<T>, timeoutMs : Long, callback : (T) -> Boolean) {
         val packet = this.waitForPacket(clazz, timeoutMs);
         if (packet != null) {
             callback(packet);
@@ -35,6 +35,7 @@ object Packets {
         var packet : T? = null;
         this.waitForPacket(clazz){response -> run {
             packet = response;
+            false
         }}
         val start = Clock.System.now();
         while (packet == null) {
@@ -46,10 +47,12 @@ object Packets {
     }
 
 
-    internal fun <T : Packet<out PacketListener>> onReceive(packet : T) {
+    internal fun <T : Packet<out PacketListener>> onReceive(packet : T) : Boolean {
         val pending = this.pending[packet::class.java];
         this.pending.remove(packet::class.java);
-        pending?.forEach{callback -> callback(packet)};
+        var cancel = false;
+        pending?.forEach{callback -> if (callback(packet)) {cancel = true;} };
+        return cancel;
     }
 
 }

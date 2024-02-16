@@ -136,21 +136,17 @@ class InventoryBuilder internal constructor(
         } else {
             {slot, stack -> putInventoryItem(slot, stack)}
         };
-        val prevStack = Main.CLIENT.player?.inventory?.getStack(17);
-        if (prevStack != null) {
-            for ((slot, stack) in this.putSlots.entries) {
-                if (stack != null) {
-                    putStack(slot.toInt(), stack);
-                }
+        for ((slot, stack) in this.putSlots.entries) {
+            if (stack != null) {
+                putStack(slot.toInt(), stack);
             }
-            putInventoryItem(17, prevStack);
         }
     }
 
 
-    companion object {
+    internal companion object {
 
-        internal fun putScreenItem(slot : Int, stack : ItemStack) {
+        fun putScreenItem(slot : Int, stack : ItemStack) {
             val screen = Main.CLIENT.currentScreen;
             if (screen is HandledScreen<*>) {
 
@@ -179,12 +175,12 @@ class InventoryBuilder internal constructor(
             }
         }
 
-        internal fun putInventoryItem(slot : Int, stack : ItemStack) {
+        fun putInventoryItem(slot : Int, stack : ItemStack) {
             Main.CLIENT.networkHandler?.sendPacket(CreativeInventoryActionC2SPacket(slot, stack));
             Main.CLIENT.player?.inventory?.setStack(slot, stack);
         }
 
-        internal fun temporaryInventoryItem(slot : Int, stack : ItemStack, op : () -> Unit = {->}) : ItemStack? {
+        fun temporaryInventoryItem(slot : Int, stack : ItemStack, op : () -> Unit = {->}) : ItemStack? {
             val prevStack = Main.CLIENT.player?.inventory?.getStack(slot);
             if (prevStack != null) {
                 this.putInventoryItem(slot, stack);
