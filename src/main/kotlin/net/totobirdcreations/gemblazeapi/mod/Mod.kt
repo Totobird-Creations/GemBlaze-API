@@ -3,17 +3,22 @@ package net.totobirdcreations.gemblazeapi.mod
 import dev.isxander.yacl3.config.v2.api.ConfigClassHandler
 import dev.isxander.yacl3.config.v2.api.serializer.GsonConfigSerializerBuilder
 import dev.isxander.yacl3.platform.YACLPlatform
+import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback
+import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientChunkEvents
 import net.fabricmc.fabric.api.client.model.loading.v1.ModelLoadingPlugin
 import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback
+import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback
 import net.minecraft.item.Items
 import net.minecraft.util.Identifier
 import net.totobirdcreations.gemblazeapi.Main
 import net.totobirdcreations.gemblazeapi.api.Messages
 import net.totobirdcreations.gemblazeapi.api.State
 import net.totobirdcreations.gemblazeapi.api.hypercube.Inventory
+import net.totobirdcreations.gemblazeapi.mod.command.SearchCommand
 import net.totobirdcreations.gemblazeapi.mod.config.Config
 import net.totobirdcreations.gemblazeapi.mod.render.HUDRenderer
 import net.totobirdcreations.gemblazeapi.mod.render.ItemRenderer
+import net.totobirdcreations.gemblazeapi.mod.render.SearchRenderer
 
 
 internal object Mod {
@@ -78,6 +83,13 @@ internal object Mod {
 
         HudRenderCallback.EVENT.register(HUDRenderer);
         ModelLoadingPlugin.register(ItemRenderer);
+
+
+        ClientCommandRegistrationCallback.EVENT.register { dispatcher, _ ->
+            SearchCommand.register(dispatcher)
+        };
+        ClientChunkEvents.CHUNK_LOAD   .register{ _, chunk -> SearchRenderer.getChunks { chunks -> chunks.add    (chunk.pos) } };
+        ClientChunkEvents.CHUNK_UNLOAD .register{ _, chunk -> SearchRenderer.getChunks { chunks -> chunks.remove (chunk.pos) } };
 
     }
 

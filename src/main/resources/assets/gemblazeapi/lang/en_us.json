@@ -1,4 +1,9 @@
 {
+
+    "command.${mod_id}.search.set"   : "Searching for functions and processes",
+    "command.${mod_id}.search.reset" : "Cleared search",
+
+
     "yacl3.config.${mod_id}.title" : "${mod_name}",
 
     "yacl3.config.${mod_id}:config.category.autoCommand" : "Auto Commands",
