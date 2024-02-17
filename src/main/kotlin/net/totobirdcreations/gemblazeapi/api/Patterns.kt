@@ -31,7 +31,7 @@ object Patterns {
     @JvmStatic val DEV_MESSAGE       = "<bold><green>» </green></bold><gray>You are now in dev mode.";
     @JvmStatic val FIND_SELF_MESSAGE = Regex("<click:run_command:['\"]/.*['\"]><hover:show_text:['\"]<#aad4aa>Click to join\\.['\"]><strikethrough><#aad4aa> *</#aad4aa></strikethrough><#aad4aa><br><white>You</white> are currently (?:at )?<white>(?<mode>playing|building|coding|spawn)</white>(?: on)?:?<br>(?:<br><#2ad4d4>→</#2ad4d4> (?<plotName>.+) <dark_gray>\\[</dark_gray><#aad4aa>(?<plotId>\\d+)</#aad4aa><dark_gray>]</dark_gray><br><#2ad4d4>→</#2ad4d4> <#aad4aa>Owner:</#aad4aa> <white>(?<plotOwner>.+)</white> (?<whitelisted>§8\\[§7Whitelisted§8])?<br>)?<#2ad4d4>→</#2ad4d4> <#aad4aa>Server:</#aad4aa> <white>(?<server>.+)</white></#aad4aa><strikethrough><#aad4aa>\\n? *");
 
-            /**
+    /**
      * Converts a `Text` object to a MiniMessage component `String`.
      */
     @JvmStatic fun textToMiniMessage(text : Text) : String {
