@@ -180,27 +180,6 @@ class InventoryBuilder internal constructor(
             Main.CLIENT.player?.inventory?.setStack(slot, stack);
         }
 
-        fun temporaryInventoryItem(slot : Int, stack : ItemStack, op : () -> Unit = {->}) : ItemStack? {
-            val prevStack = Main.CLIENT.player?.inventory?.getStack(slot);
-            if (prevStack != null) {
-                this.putInventoryItem(slot, stack);
-                op();
-                var count                   = 0u;
-                var finalStack : ItemStack? = null;
-                while (true) {
-                    val packet = Packets.waitForPacket(ScreenHandlerSlotUpdateS2CPacket::class.java, 75) ?: break;
-                    count += 1u;
-                    if (count >= 2u) {
-                        finalStack = packet.stack;
-                        break;
-                    }
-                }
-                this.putInventoryItem(slot, prevStack);
-                return finalStack;
-            }
-            return null;
-        }
-
     }
 
 }

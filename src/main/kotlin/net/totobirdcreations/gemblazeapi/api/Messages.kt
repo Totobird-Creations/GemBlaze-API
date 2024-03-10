@@ -4,6 +4,8 @@ import net.fabricmc.loader.api.FabricLoader
 import net.minecraft.network.listener.PacketListener
 import net.minecraft.network.packet.Packet
 import net.minecraft.network.packet.s2c.play.GameMessageS2CPacket
+import net.minecraft.text.Style
+import net.minecraft.text.Text
 import net.totobirdcreations.gemblazeapi.Main
 
 
@@ -39,6 +41,8 @@ object Messages {
                     State.state!!.plot!!.whitelisted .put(match.groups["whitelisted" ] != null)
                 }
             }
+
+            //return GameMessageS2CPacket(Text.empty().append(Text.literal("⇄").setStyle(Style.EMPTY.withColor(0x00ff00).withInsertion(packet.content.string.split(": ").drop(1).joinToString(": ").reversed()))).append(" ").append(packet.content), false);
         }
         return packet;
     }

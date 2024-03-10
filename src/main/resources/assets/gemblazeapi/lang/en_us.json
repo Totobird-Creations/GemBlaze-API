@@ -2,6 +2,9 @@
 
     "command.${mod_id}.search.set"   : "Searching for functions and processes",
     "command.${mod_id}.search.reset" : "Cleared search",
+    "command.${mod_id}.ignoremenu.true"    : "Enabled ignore menu mode",
+    "command.${mod_id}.ignoremenu.false"   : "Disabled ignore menu mode",
+    "command.${mod_id}.ignoremenu.trigger" : "§cIgnored incoming menu packet",
 
 
     "yacl3.config.${mod_id}.title" : "${mod_name}",

@@ -44,7 +44,6 @@ class BlockMixin {
                         break;
                     }
                 }
-                cir.setReturnValue(ItemStack.EMPTY);
             }
         }
     }

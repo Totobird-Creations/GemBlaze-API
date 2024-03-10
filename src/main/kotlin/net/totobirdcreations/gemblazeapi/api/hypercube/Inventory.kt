@@ -64,7 +64,7 @@ object Inventory {
     @JvmStatic val glitchStick : RequestableValue<ItemStack> = RequestableValue{-> run {
         if (State.getPlot()?.mode == DiamondFireMode.DEV) {
             if (Main.CLIENT.networkHandler?.sendCommand("plot glitch") == true) {
-                val packet = Packets.waitForPacket(ScreenHandlerSlotUpdateS2CPacket::class.java, 100);
+                val packet = Packets.waitForPacket(ScreenHandlerSlotUpdateS2CPacket::class.java, 250);
                 if (packet != null && packet.stack.isOf(Items.STICK)) {
                     Thread.sleep(100);
                     InventoryBuilder.putInventoryItem(packet.slot, Items.AIR.defaultStack);
@@ -84,7 +84,7 @@ object Inventory {
     @JvmStatic val cancelWand  : RequestableValue<ItemStack> = RequestableValue{-> run {
         if (State.getPlot()?.mode == DiamondFireMode.DEV) {
             if (Main.CLIENT.networkHandler?.sendCommand("cancel") == true) {
-                val packet = Packets.waitForPacket(ScreenHandlerSlotUpdateS2CPacket::class.java, 100);
+                val packet = Packets.waitForPacket(ScreenHandlerSlotUpdateS2CPacket::class.java, 250);
                 if (packet != null && packet.stack.isOf(Items.DIAMOND_SHOVEL)) {
                     Thread.sleep(100);
                     InventoryBuilder.putInventoryItem(packet.slot, Items.AIR.defaultStack);

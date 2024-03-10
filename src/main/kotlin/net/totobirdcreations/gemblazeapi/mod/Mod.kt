@@ -5,20 +5,22 @@ import dev.isxander.yacl3.config.v2.api.serializer.GsonConfigSerializerBuilder
 import dev.isxander.yacl3.platform.YACLPlatform
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientChunkEvents
+import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents
 import net.fabricmc.fabric.api.client.model.loading.v1.ModelLoadingPlugin
 import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback
-import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback
-import net.minecraft.item.Items
 import net.minecraft.util.Identifier
 import net.totobirdcreations.gemblazeapi.Main
 import net.totobirdcreations.gemblazeapi.api.Messages
 import net.totobirdcreations.gemblazeapi.api.State
 import net.totobirdcreations.gemblazeapi.api.hypercube.Inventory
+import net.totobirdcreations.gemblazeapi.mod.command.IgnoreMenuCommand
 import net.totobirdcreations.gemblazeapi.mod.command.SearchCommand
 import net.totobirdcreations.gemblazeapi.mod.config.Config
 import net.totobirdcreations.gemblazeapi.mod.render.HUDRenderer
 import net.totobirdcreations.gemblazeapi.mod.render.ItemRenderer
 import net.totobirdcreations.gemblazeapi.mod.render.SearchRenderer
+import java.io.BufferedReader
+import java.io.InputStreamReader
 
 
 internal object Mod {
@@ -36,8 +38,12 @@ internal object Mod {
 
     private var hasEnabledLagslayer : Boolean = false;
 
+    private var stdin = BufferedReader(InputStreamReader(System.`in`));
+
 
     fun init() {
+
+        CONFIG_HANDLER.load();
 
         State.ENTER_PLOT.register{_ -> run {
             val id = CONFIG.autoCommandChatMode.id;
@@ -86,10 +92,17 @@ internal object Mod {
 
 
         ClientCommandRegistrationCallback.EVENT.register { dispatcher, _ ->
-            SearchCommand.register(dispatcher)
+            SearchCommand.register(dispatcher);
+            IgnoreMenuCommand.register(dispatcher);
         };
         ClientChunkEvents.CHUNK_LOAD   .register{ _, chunk -> SearchRenderer.getChunks { chunks -> chunks.add    (chunk.pos) } };
         ClientChunkEvents.CHUNK_UNLOAD .register{ _, chunk -> SearchRenderer.getChunks { chunks -> chunks.remove (chunk.pos) } };
+
+        ClientTickEvents.START_CLIENT_TICK.register{ _ -> try {
+            if (this.stdin.ready()) {
+                Main.CLIENT.networkHandler?.sendCommand(this.stdin.readLine());
+            }
+        } catch (_ : Exception) {}};
 
     }
 

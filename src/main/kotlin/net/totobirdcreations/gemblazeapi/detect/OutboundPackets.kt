@@ -30,7 +30,7 @@ internal object OutboundPackets {
                 }
 
                 else if (isDev && Patterns.DEFAULT_INVENTORY.matches(command)) {
-                    Thread{-> Packets.waitForPacket(ScreenHandlerSlotUpdateS2CPacket::class.java, 100){_ -> run {
+                    Thread{-> Packets.waitForPacket(ScreenHandlerSlotUpdateS2CPacket::class.java, 500){_ -> run {
                         Inventory.isCompactInventory    = false;
                         Inventory.instructionBlocksMenu = null;
                         Thread.sleep(10);
@@ -42,7 +42,7 @@ internal object OutboundPackets {
                 }
 
                 else if (isDev && Patterns.COMPACT_INVENTORY.matches(command)) {
-                    Thread{->Packets.waitForPacket(ScreenHandlerSlotUpdateS2CPacket::class.java, 100){_ -> run {
+                    Thread{->Packets.waitForPacket(ScreenHandlerSlotUpdateS2CPacket::class.java, 500){_ -> run {
                         Inventory.isCompactInventory = true;
                         val inventory = Main.CLIENT.player!!.inventory.main;
                         for (stack in inventory) {

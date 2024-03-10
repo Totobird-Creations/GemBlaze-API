@@ -15,8 +15,7 @@
 		"modmenu" : {
 			"links" : {
 				"modmenu.discord" : "https://discord.gg/b6gWFwDyC9"
-			},
-			"badges": ["library"]
+			}
 		}
 	},
 

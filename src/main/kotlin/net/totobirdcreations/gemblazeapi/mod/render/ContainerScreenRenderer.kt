@@ -95,7 +95,7 @@ internal object ContainerScreenRenderer {
             }
 
             Thread{->
-                Packets.waitForPacket(OpenScreenS2CPacket::class.java, 250);
+                Packets.waitForPacket(OpenScreenS2CPacket::class.java, 1000);
                 if (this.referenceBookSlot != null && this.referenceBookRevert != null) {
                     InventoryBuilder.putInventoryItem(this.referenceBookSlot!!, this.referenceBookRevert!!);
                     this.referenceBookSlot = null;

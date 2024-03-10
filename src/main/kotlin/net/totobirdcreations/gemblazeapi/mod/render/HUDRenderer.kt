@@ -23,7 +23,7 @@ internal object HUDRenderer : HudRenderCallback {
 
     fun updateLagslayer(percent : Float) {
         this.lagslayerPercent  = percent;
-        this.lagslayerTimeLeft = 40.0f;
+        this.lagslayerTimeLeft = 100.0f;
     }
 
 

@@ -9,7 +9,7 @@ import net.minecraft.text.Text
 import net.totobirdcreations.gemblazeapi.Main
 import net.totobirdcreations.gemblazeapi.mod.render.SearchRenderer
 
-private typealias S = FabricClientCommandSource;
+internal typealias S = FabricClientCommandSource;
 
 
 internal object SearchCommand {

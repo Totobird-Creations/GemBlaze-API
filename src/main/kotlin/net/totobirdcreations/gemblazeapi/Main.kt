@@ -73,7 +73,7 @@ internal object Main : ClientModInitializer {
 			}};
 
 			if (CLIENT.player!!.inventory.isEmpty) {
-				Packets.waitForPacket(ScreenHandlerSlotUpdateS2CPacket::class.java, 250);
+				Packets.waitForPacket(ScreenHandlerSlotUpdateS2CPacket::class.java, 500);
 				Thread.sleep(10);
 			};
 			val inventory = CLIENT.player!!.inventory.main;

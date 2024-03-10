@@ -3,11 +3,14 @@ package net.totobirdcreations.gemblazeapi.detect
 import net.minecraft.item.Items
 import net.minecraft.network.listener.PacketListener
 import net.minecraft.network.packet.Packet
+import net.minecraft.network.packet.c2s.play.CloseHandledScreenC2SPacket
 import net.minecraft.network.packet.s2c.play.*
+import net.minecraft.text.Text
 import net.totobirdcreations.gemblazeapi.Main
 import net.totobirdcreations.gemblazeapi.api.*
 import net.totobirdcreations.gemblazeapi.api.hypercube.Inventory
 import net.totobirdcreations.gemblazeapi.mod.Mod
+import net.totobirdcreations.gemblazeapi.mod.command.IgnoreMenuCommand
 import net.totobirdcreations.gemblazeapi.mod.config.Config
 import net.totobirdcreations.gemblazeapi.mod.render.ContainerScreenRenderer
 import net.totobirdcreations.gemblazeapi.mod.render.HUDRenderer
@@ -21,6 +24,12 @@ internal object InboundPackets {
         var finalPacket : Packet<out PacketListener>? = packet;
 
         if (State.isOnDF()) {
+
+            if (packet is OpenScreenS2CPacket && IgnoreMenuCommand.ignoreMenu) {
+                Main.CLIENT.networkHandler?.sendPacket(CloseHandledScreenC2SPacket(packet.syncId));
+                Main.CLIENT.player?.sendMessage(Text.translatable("command.${Main.ID}.ignoremenu.trigger"));
+                return null;
+            }
 
             if (Packets.onReceive(packet)) {
                 return null;
@@ -46,7 +55,7 @@ internal object InboundPackets {
                     val minimessage = Patterns.textToMiniMessage(packet.name);
 
                     if (minimessage == Patterns.DEV_MENU) {
-                        Thread{-> Packets.waitForPacket(ScreenHandlerSlotUpdateS2CPacket::class.java, 100){ _ -> run {
+                        Thread{-> Packets.waitForPacket(ScreenHandlerSlotUpdateS2CPacket::class.java, 500){ _ -> run {
                             Thread.sleep(100);
                             val builder = InventoryBuilder(true);
                             Inventory.DEV_ITEMS.trigger(builder);
@@ -56,7 +65,7 @@ internal object InboundPackets {
                     }
 
                     else if (minimessage == Patterns.VALUES_MENU) {
-                        Thread{-> Packets.waitForPacket(ScreenHandlerSlotUpdateS2CPacket::class.java, 100){ _ -> run {
+                        Thread{-> Packets.waitForPacket(ScreenHandlerSlotUpdateS2CPacket::class.java, 500){ _ -> run {
                             Thread.sleep(100);
                             val builder = InventoryBuilder(true, 18u, listOf(
                                 13u, 14u, 15u, 16u, 17u
@@ -86,6 +95,7 @@ internal object InboundPackets {
             }
 
         }
+
         return finalPacket;
     }
 
