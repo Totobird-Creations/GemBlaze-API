@@ -91,8 +91,8 @@ internal object ClientConnectionMixin {
                     Main.CONFIG.chatColoursNameInrange
                 } else { Main.CONFIG.chatColoursNameDefault }).rgb).substring(2);
                 var mm = "<colour:#${colour}>${username}</colour><grey>:</grey> ${playerChat.groups["message"]!!.value}";
-                if (! Main.CONFIG.chatHideTagsVIP   ) { mm = playerChat.groups["vip"   ]!!.value + mm; }
-                if (! Main.CONFIG.chatHideTagsRanks ) { mm = playerChat.groups["ranks" ]!!.value + mm; }
+                if (! Main.CONFIG.chatHideTagsVIP   ) { mm = (playerChat.groups["vip"   ]?.value ?: "") + mm; }
+                if (! Main.CONFIG.chatHideTagsRanks ) { mm = (playerChat.groups["ranks" ]?.value ?: "") + mm; }
                 return GameMessageS2CPacket(mmToText(mm), false);
             }
 
