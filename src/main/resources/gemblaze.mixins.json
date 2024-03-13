@@ -1,0 +1,24 @@
+{
+    "required": true,
+    "package": "net.totobirdcreations.gemblaze.mixin",
+    "compatibilityLevel": "JAVA_17",
+    "client": [
+        "BlockItemMixin",
+        "BlockMixin",
+        "ChestBlockEntityRendererMixin",
+        "ChestBlockMixin",
+        "ClientConnectionMixin",
+        "CreativeInventoryScreenMixin",
+        "DebugRendererMixin",
+        "GenericContainerScreenMixin",
+        "InGameHudMixin",
+        "ItemRendererMixin",
+        "LightmapTextureManagerMixin",
+        "SignBlockEntityRendererMixin",
+        "codeclient.CCCustomChestMenuMixin",
+        "codeclient.CCEventMixin"
+    ],
+    "injectors": {
+        "defaultRequire": 1
+    }
+}

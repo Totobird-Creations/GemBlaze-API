@@ -1,0 +1,9 @@
+accessWidener v2 named
+
+accessible method net/minecraft/client/MinecraftClient openChatScreen (Ljava/lang/String;)V
+
+accessible field net/minecraft/network/packet/s2c/play/ChunkDeltaUpdateS2CPacket sectionPos Lnet/minecraft/util/math/ChunkSectionPos;
+accessible field net/minecraft/network/packet/s2c/play/ChunkDeltaUpdateS2CPacket positions [S
+mutable field net/minecraft/network/packet/s2c/play/ChunkDeltaUpdateS2CPacket positions [S
+accessible field net/minecraft/network/packet/s2c/play/ChunkDeltaUpdateS2CPacket blockStates [Lnet/minecraft/block/BlockState;
+mutable field net/minecraft/network/packet/s2c/play/ChunkDeltaUpdateS2CPacket blockStates [Lnet/minecraft/block/BlockState;

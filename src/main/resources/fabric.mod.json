@@ -8,7 +8,7 @@
 	"license" : "LGPL-2.1-only",
 
 	"name"        : "${mod_name}",
-	"description" : "DiamondFire Utility Creation Just Got a Lot Easier",
+	"description" : "DiamondFire development got a QoL update.",
 	"icon"        : "assets/${mod_id}/icon.png",
 
 	"custom" : {
@@ -34,8 +34,9 @@
 
 	"environment" : "client",
 	"entrypoints" : {
-		"client"  : [{"value" : "${mod_group}.${mod_id}.Main"                    , "adapter" : "kotlin"}],
-		"modmenu" : [{"value" : "${mod_group}.${mod_id}.mod.config.ConfigScreen" , "adapter" : "kotlin"}]
+		"client"       : [{"value" : "${mod_group}.${mod_id}.Main"                                           , "adapter" : "kotlin"}],
+		"mixinsquared" : [{"value" : "${mod_group}.${mod_id}.mixinternal.codeclient.CCMDrawContextCanceller" , "adapter" : "kotlin"}],
+		"modmenu"      : [{"value" : "${mod_group}.${mod_id}.config.ConfigScreen"                            , "adapter" : "kotlin"}]
 	},
 	"mixins": [{"config" : "${mod_id}.mixins.json", "environment" : "client"}],
 	"accessWidener": "${mod_id}.accesswidener",
@@ -48,20 +49,18 @@
 		"fabricloader"              : ">=${fabricloader_version}",
 		"fabric-api"                : "*",
 		"fabric-language-kotlin"    : ">=${kotlin_version}",
-		"yet_another_config_lib_v3" : "*"
-
+		"yet_another_config_lib_v3" : "*",
+		"codeclient"                : ">=${codeclient_version}"
 	},
 
 	"recommends": {
 		"nochatreports"   : "*",
 		"modmenu"         : "*",
-		"codeclient"      : "*",
 		"visiblebarriers" : "*"
 	},
 
 	"breaks": {
-		"recode"     : "*",
-		"codeclient" : "<${codeclient_version}"
+		"recode" : "*"
 	}
 
 }

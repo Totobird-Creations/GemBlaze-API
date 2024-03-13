@@ -14,6 +14,8 @@ base {
 repositories {
 	// Adventure
 	mavenCentral()
+	// Mixinsquared
+	maven {url "https://jitpack.io"}
 	// Yetanotherconfiglib
 	maven {url "https://maven.isxander.dev/releases"}
 	// Modmenu
@@ -40,6 +42,8 @@ dependencies {
 
 	// Mixinextras
 	include(implementation(annotationProcessor("io.github.llamalad7:mixinextras-fabric:${project.mixinextras_version}")))
+	// Mixinsquared
+	include(implementation(annotationProcessor("com.github.bawnorton.mixinsquared:mixinsquared-fabric:${project.mixinsquared_version}")))
 
 	// Yetanotherconfiglib
 	modApi("dev.isxander.yacl:yet-another-config-lib-fabric:${project.yetanotherconfiglib_version}+${project.minecraft_version}")
