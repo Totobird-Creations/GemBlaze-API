@@ -203,6 +203,7 @@ internal object ClientConnectionMixin {
 
         else if (packet is OpenScreenS2CPacket) {
             val mm = textToMm(packet.name);
+            DocsRenderer.clearScreen();
             if (mm == "<lang:container.chest>") {
                 DocsRenderer.onOpenScreen();
             }

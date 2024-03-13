@@ -47,7 +47,7 @@ internal object DocsRenderer {
 
     private var lastOpened : BlockPos?  = null;
     private var refSlot    : Int?       = null; // The slot where the reference book is expected to be.
-    private var refUuid   : String?    = null; // Used to track if the reference book was changed.
+    private var refUuid    : String?    = null; // Used to track if the reference book was changed.
     private var refRevert  : ItemStack? = null; // The stack to revert to after getting the needed information.
 
     fun onOpenChest(pos : BlockPos) {
@@ -112,11 +112,15 @@ internal object DocsRenderer {
     }
 
 
-    fun onOpenScreen() {
+    fun clearScreen() {
+        this.active    = false;
         this.refSlot   = null;
         this.refUuid   = null;
         this.refRevert = null;
+    }
 
+
+    fun onOpenScreen() {
         val world   = Main.CLIENT.world;
         val signPos = this.lastOpened;
         if (world != null && signPos != null) {
